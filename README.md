@@ -5,5 +5,5 @@ To install CCinit, use this, except you might want to replace the `~` directory 
 ```bash
 cd ~
 git clone git@github.com:codemanticism/CCinit.git
-exporexport PATH=$PATH:~/CCinit
+cp ~/CCinit/ccinit.py ~/.local/bin/ccinit
 ```
