@@ -1,3 +1,4 @@
+/*https://raw.githubusercontent.com/codemanticism/CCinit/refs/heads/main/libraries/types.c*/
 #include "types.c"
 struct option_number{
 	u32 number;
