@@ -33,11 +33,11 @@ def process(text):
             array[int_] = "/".join(old[0:(len(old) - count)]) + string
             int_ += 1
         for url in array:
-            subprocess.run(["wget", url])
+            result = subprocess.run(["wget", url])
             process(url)
-if len(sys.argv) == 1:
+if len(sys.argv) > 1:
     process(sys.argv[1])
-elif:
+else:
     try:
         file_open = open("main.c", "r")
         file_open.read()
