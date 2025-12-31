@@ -1,12 +1,12 @@
 # CCinit
 <img width="320" height="100" alt="image" src="https://i.ibb.co/WW5V92kJ/ccinit.png" />
-<b> ⚠️ This is stil a largely experimental thing. </b> 
-
-## Observations
+<b> ⚠️ This is still a largely experimental thing. </b> 
+CCinit is a tool that generates a single `main.c` file based on a `/**/` annotation, at the start of the file, (described in a section below) which might hypothetically include libraries written as URLs or, in shorter form, with an initial `/` in the format described below.
+## Important notes
 Note that libraries need to be converted to this format, so that they can work at all.
 Also linters as of right now aren't compatible with this special library format.
-The `library` directory contains an library made in such a way. 
-After all it will put all that into a `main.c` file, that might be gigantic, but which is really supposed to be easily used thru features like CTRL + F and terminal text editor.
+The `library` directory contains a library made in such a way. 
+After all it will put all that into a `main.c` file, that might be gigantic, but which is really supposed to be easily used through features like CTRL + F and terminal text editor.
 
 ## Recommendations  
 I also recommend you to use to save frequently, by using Git, so that your work might not be lost.
@@ -20,17 +20,17 @@ To install CCinit, use this, except you might want to replace the `~` directory 
 
 ```bash
 cd ~
-git clone git@github.com:codemanticism/CCinit.git
+git clone https://github.com/codemanticism/CCinit.git
 cp ~/CCinit/ccinit.py ~/.local/bin/ccinit
 ```
 ## How to use
-Two examples
+### What to type in the terminal
 `ccinit`: Create a `main.c` file.
 `ccinit main.c`: Reads the `main.c` file and actually does all that heavy lifting for you and everything after `\n/*main*/` remains the same.
 
 ### How to format the .c file
-<b>Important: Don't use the `#include "LIBRARY"` structure wherein LIBRARY refers to the file which has already been specified thru the the system of initial annotations I made for this program.</b>
-If the element of the array that is generated after ` ` is treated as the seperator, starts with an `/` like the one in the example, it already fills all the stuff in, so that, for example, `/[insert_other_project]/refs/heads/main/main.c` if used in the correct context can make it so that it already fills in the rest, meaning the `https://raw.githubusercontent.com/codemanticism` part, in this case.
+<b>Important: Don't use the `#include "LIBRARY"` structure wherein LIBRARY refers to the file which has already been specified through the the system of initial annotations I made for this program.</b>
+For all of these substrings seperated by ` ` that start with `/`, it already fills all the stuff in, so that, for example, `/[insert_other_project]/refs/heads/main/main.c` if used in the correct context can make it so that it already fills in the rest, meaning the `https://raw.githubusercontent.com/codemanticism` part, in this case.
 It creates a `compile.sh` file, if there's not one and no arguments are specified, which is supposed to compile it with `gcc`.
 If there's no `main.c` in the root of the directory, it will create a `main.c` file and no further arguments are provided in the context. If there is one argument, then it will download all the dependencies listed like so, at the start of the file.
 An example:
@@ -44,4 +44,4 @@ int main(){
 ```
 It has to be styled like this: `/*example*/`, not like that: `//example`. It has to be the very first line of the file, so the file has to start with `/*`.
 ## Limits
-It was made to be used for `.c` only. I wanted to make using C more "Pythonic".
+It was made to be used for `.c` files only. I wanted to make using C easier and more fun to use, so that it could be more like working with `pip`.
