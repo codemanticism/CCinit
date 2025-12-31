@@ -1,6 +1,5 @@
 /*https://raw.githubusercontent.com/codemanticism/CCinit/refs/heads/main/libraries/number.c /types.c*/
 #include "number.c"
-#include "types.c"
 enum Operation{
 	ADD,
 	SUBTRACT,
@@ -8,12 +7,13 @@ enum Operation{
 	DIVIDE,
 	UNDEFINED,
 };
-struct option_float process(char* characters){
+//works
+struct option_float process(char* arr){
 	u32 layer = 0;
 	float result = 0;
 	enum Operation op = UNDEFINED;
-	for(u32 i = 0; characters[i] != '\0'; i++){
-		switch(characters[i]){
+	for(u32 i = 0; arr[i] != '\0'; i++){
+		switch(arr[i]){
 			case ' ':
 				break;
 			case '+':
@@ -41,19 +41,19 @@ struct option_float process(char* characters){
 				layer -= 1;
 				break;
 			default:
-				char* start = characters + i;
-				while ((characters[i] == '.') || ((characters[i] >= '0') && (characters[i] <= '9'))){
+				char* start = arr + i;
+				while ((arr[i] == '.') || ((arr[i] >= '0') && (arr[i] <= '9'))){
 					i++;
 				}
-				char character = characters[i];
-				characters[i] = '\0';
+				char character = arr[i];
+				arr[i] = '\0';
 				struct option_float opt = process_float(start);
 				struct option_float flt;
 				if(opt.unactivated == 1){
 					flt.unactivated = 1;
 					return flt;
 				}
-				characters[i] = character;
+				arr[i] = character;
 				float the_number = opt.number;
 				if(op == UNDEFINED){
 					result = the_number;
@@ -65,7 +65,8 @@ struct option_float process(char* characters){
 					result *= the_number;
 				}else if(op == DIVIDE){
 					result /= the_number;
-				}				
+				}
+				break;				
 				
 		}
 	}

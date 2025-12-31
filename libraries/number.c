@@ -1,5 +1,6 @@
 /*https://raw.githubusercontent.com/codemanticism/CCinit/refs/heads/main/libraries/types.c*/
 #include "types.c"
+#include "random.c"
 struct option_number{
 	u32 number;
 	char unactivated;
@@ -8,6 +9,7 @@ struct option_float{
 	float number;
 	char unactivated;
 };
+//works
 struct option_number convert(char character){ //Use with caution
 	struct option_number option_number_instance;
 	option_number_instance.unactivated = 1;
@@ -17,6 +19,7 @@ struct option_number convert(char character){ //Use with caution
 	}
 	return option_number_instance;
 }
+//works
 unsigned int how_many_powers_of_ten(char* string){
 	u32 b = 1;
 	for(u32 i = 0; string[i] != '\0'; i++){
@@ -24,6 +27,7 @@ unsigned int how_many_powers_of_ten(char* string){
 	}
 	return b;	
 }
+//works
 struct option_number process_integer(char* string){
 	u32 number = 0;
 	for(u32 i = 0; string[i] != '\0'; i++){
@@ -38,29 +42,32 @@ struct option_number process_integer(char* string){
 	}
 	struct option_number to_return;
 	to_return.unactivated = 0;
-	to_return.number = number; 
+	to_return.number = number;
+	printf("(");
+	printf("%u", number);
+	printf(")"); 
 	return to_return;	
 }
-
+//works
 struct option_float process_float(char* string){
 	for(u32 i = 0; string[i] != '\0'; i++){
 		if(string[i] == '.'){
 			string[i] = '\0';
-			char* position = string + i + 1;
+			char* position = &(string[i + 1]);
 			struct option_number return_option_number = process_integer(position);
 			if(return_option_number.unactivated){
 				struct option_float opt_float;
 				opt_float.unactivated = 1; 
 				return opt_float;
 			}
-			float float_ = ((return_option_number.number) / how_many_powers_of_ten(position));
-			return_option_number = process_integer(string);
-			if(return_option_number.unactivated){
+			struct option_number return_option_number_new = process_integer(string);
+			if(return_option_number_new.unactivated){
 				struct option_float opt_float;
 				opt_float.unactivated = 1; 
 				return opt_float;
 			}
-			float_ += return_option_number.number;
+			float float_ = (((float)(return_option_number.number)) / how_many_powers_of_ten(position)) + return_option_number_new.number;
+			printf("@ %f @", float_);
 			string[i] = '.';
 			struct option_float opt_float;
 			opt_float.number = float_;
@@ -68,6 +75,7 @@ struct option_float process_float(char* string){
 			return opt_float;
 		}
 	}	
+	printf("*");
 	struct option_number return_float = process_integer(string);
 	struct option_float opt_float;
 	opt_float.unactivated = return_float.unactivated;
