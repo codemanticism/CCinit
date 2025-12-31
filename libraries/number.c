@@ -1,4 +1,4 @@
-/*https://raw.githubusercontent.com/codemanticism/CCinit/refs/heads/main/libraries/types.c*/
+/*https://raw.githubusercontent.com/codemanticism/CCinit/refs/heads/main/libraries/types.c /random.c*/
 #include "types.c"
 #include "random.c"
 struct option_number{

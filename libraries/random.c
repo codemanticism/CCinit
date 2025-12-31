@@ -1,4 +1,4 @@
-/*https://raw.githubusercontent.com/codemanticism/CCinit/refs/heads/main/libraries/types.c*/
+/**/
 #include <stdio.h>
 #include <time.h>
 // Works.
