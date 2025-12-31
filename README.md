@@ -22,7 +22,7 @@ Two examples
 `ccinit`: Create a `main.c` file.
 `ccinit main.c`: Reads the `main.c` file and actually does all that heavy lifting for you and everything after `\n/*main*/` remains the same.
 
-###Special formatting
+### Special formatting
 <b>Important: Don't use the `#include "LIBRARY"` structure wherein LIBRARY refers to the file which has already been specified thru the the system of initial annotations I made for this program.</b>
 It creates a `compile.sh` file, if there's not one and no arguments are specified, which is supposed to compile it with `gcc`.
 If there's no `main.c` in the root of the directory, it will create a `main.c` file and no further arguments are provided in the context. If there is one argument, then it will download all the dependencies listed like so, at the start of the file:
