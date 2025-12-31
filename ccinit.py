@@ -60,46 +60,70 @@ def process(text, except_if):
                     read_file.close()
                     process(divisions[len(divisions) - 1], except_if)
                 except:
-                    result = subprocess.run(["wget", url])
+                    result = subprocess.run(["wget", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
                     process(divisions[len(divisions) - 1], except_if)
 def function(argument):
     global libraries
     global files
     global dependencies
+
     include = '#include'
     process(argument, argument)
-    print(dependencies)
+    for dependency in dependencies:
+        if dependency != argument:
+            os.remove(dependency)
+        print('✅', dependency, 'installed.')
+
     read_file = open("main.c", "r")
     global already_done
     text_read_file = read_file.read()
     read_file.close()
-    pos = re.search(r'\n[^\n"](.*)\/\*main\*\/.*[^\n"][\s\S]*', text_read_file)
-    text_read_file_ = text_read_file[0:pos]
+
     write_file = open("main-backup.c", "w")
     write_file.write(text_read_file)
     write_file.close() 
     write_file_2 = open("main.c", "w")
-    str_ = []
+    
+    where = 0
+    if(len(text_read_file) >= 2):
+        if ((text_read_file[0]) + (text_read_file[1])) == '/*':
+            asterisk = False
+            where = 2
+            for character in text_read_file[2:]:
+                if (character) == '*':
+                    asterisk = True
+                elif (character) == '/':
+                    if asterisk:
+                        where -= 1
+                        break
+                elif (character) == '\n':
+                    where = 2
+                    break
+                where += 1
+    str_ = [text_read_file[0:(where)], "*/\n"]
+
     includes = []
-    files_keys = list( files.keys() )
     new_boolean = True
     actual_files = []
-    print(already_done)
-    while new_boolean:
+    files[argument] = text_read_file
+    files_keys = list( files.keys() )
+    while new_boolean: # while not all have been added to the .c file
         file_count = len(files) - 1
         while file_count >= 0:
             boolean = False
             key = files_keys[file_count]
-            for dependence in dependencies[key]:
-                if already_done[dependence] == False:
-                    boolean = True
+            if argument != key:
+                for dependence in dependencies[key]:
+                    if already_done[dependence] == False:
+                        boolean = True
             if boolean:
                 file_count -= 1
                 break
             file = files[key]
             position = file.find("\n\n")
-            str__ =  file[0:position]
-            actual_files.append(key)
+            str__ =  file[0:(position + 1)]
+            if key != argument:
+                actual_files.append(key)
             i = 0;
             while(i < len(str__)):
                 _str = str__[i:(i + len(include))]
@@ -120,13 +144,18 @@ def function(argument):
         str_.append("#include ")
         str_.append(include_item)
         str_.append("\n")
+
     str_.append("\n")
+    
     for key in actual_files:
         position = files[key].find("\n\n")
         str_.append( "\n" )
         str_.append( files[key][(position + 2):] )
-    str_.append(text_read_file_)
-    print("".join(str_))
+
+    pos = text_read_file.find('\n/*main*/')
+    text_read_file_edit = text_read_file[pos:]
+    str_.append(text_read_file_edit)
+
     write_file_2.write("".join(str_))
     write_file_2.close()
 if len(sys.argv) > 1:
@@ -136,6 +165,7 @@ else:
         file_open = open("main.c", "r")
         file_open.read()
         file_open.close()
+        
         function("main.c")
     except:
         file_write = open("main.c", "w")
