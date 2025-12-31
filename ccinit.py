@@ -7,68 +7,68 @@ libraries = []
 already_done = {}
 files = {}
 dependencies = {}
-def process(text):
+def process(text, except_if):
     global libraries
     global files
     global dependencies
     global already_done
     open_file = open(text, "r")
     read = open_file.read()
-    already_done[text] = False
-    try:
-        files[text].append( read )
-    except:
-        files[text] = [read]
     open_file.close()
-    if ((read[0]) + (read[1])) == '/*':
-        asterisk = False
-        integer = 2
-        for character in read[2:]:
-            if (character) == '*':
-                asterisk = True
-            elif (character) == '/':
-                if asterisk:
-                    integer -= 1
+    if text != except_if:
+        already_done[text] = False
+        files[text] = read
+        dependencies[text] = []
+    if(len(read) >= 2):
+        if ((read[0]) + (read[1])) == '/*':
+            asterisk = False
+            integer = 2
+            for character in read[2:]:
+                if (character) == '*':
+                    asterisk = True
+                elif (character) == '/':
+                    if asterisk:
+                        integer -= 1
+                        break
+                elif (character) == '\n':
+                    integer = 2
                     break
-            elif (character) == '\n':
-                integer = 2
-                break
-            integer += 1
-        array = read[2:integer].split(" ")
-        new_array = []
-        old = []
-        count = 0
-        for string in array:
-            if len(string) > 0:
-                if string[0] == '/':
-                    count = 0
-                    for character in string:
-                        if character == '/':
-                            count += 1
-                    new_array.append( "/".join(old[:(len(old) - count)]) + string )
-                else:
-                    new_array.append( string )
-                    old = string.split("/") 
-        for url in new_array:
-            divisions = url.split("/")
-            try:
-                dependencies[text].append( divisions[len(divisions) - 1] )
-            except:
-                dependencies[text] = [divisions[len(divisions) - 1]]
-            try:            
-                read_file = open(divisions[len(divisions) - 1], "r")
-                read_file.read()
-                read_file.close()
-            except:
-                result = subprocess.run(["wget", url])
+                integer += 1
+            array = read[2:integer].split(" ")
+            new_array = []
+            old = []
+            count = 0
+            for string in array:
+                if len(string) > 0:
+                    if string[0] == '/':
+                        count = 0
+                        for character in string:
+                            if character == '/':
+                                count += 1
+                        new_array.append( "/".join(old[:(len(old) - count)]) + string )
+                    else:
+                        new_array.append( string )
+                        old = string.split("/") 
+            for url in new_array:
+                divisions = url.split("/")
+                if text != except_if:
+                    dependencies[text].append( divisions[len(divisions) - 1] )
                 libraries.append(divisions[len(divisions) - 1])
-                process(divisions[len(divisions) - 1])
+                try:            
+                    read_file = open(divisions[len(divisions) - 1], "r")
+                    read_file.read()
+                    read_file.close()
+                    process(divisions[len(divisions) - 1], except_if)
+                except:
+                    result = subprocess.run(["wget", url])
+                    process(divisions[len(divisions) - 1], except_if)
 def function(argument):
     global libraries
     global files
     global dependencies
     include = '#include'
-    process(argument)
+    process(argument, argument)
+    print(dependencies)
     read_file = open("main.c", "r")
     global already_done
     text_read_file = read_file.read()
@@ -82,21 +82,24 @@ def function(argument):
     str_ = []
     includes = []
     files_keys = list( files.keys() )
-    file_count = len(files) - 1
-    while False in already_done:
-        print(already_done)
+    new_boolean = True
+    actual_files = []
+    print(already_done)
+    while new_boolean:
+        file_count = len(files) - 1
         while file_count >= 0:
             boolean = False
             key = files_keys[file_count]
-            print(dependences[key])
-            for dependence in dependences[key]:
-                if dependence not in already_done:
+            for dependence in dependencies[key]:
+                if already_done[dependence] == False:
                     boolean = True
             if boolean:
+                file_count -= 1
                 break
             file = files[key]
             position = file.find("\n\n")
             str__ =  file[0:position]
+            actual_files.append(key)
             i = 0;
             while(i < len(str__)):
                 _str = str__[i:(i + len(include))]
@@ -109,24 +112,23 @@ def function(argument):
                 i += 1
             already_done[key] = True
             file_count -= 1
+        new_boolean = False
+        for value in already_done:
+            if value == False:
+                new_boolean = True
     for include_item in includes:
         str_.append("#include ")
         str_.append(include_item)
         str_.append("\n")
     str_.append("\n")
-    for key in files_keys:
+    for key in actual_files:
         position = files[key].find("\n\n")
         str_.append( "\n" )
         str_.append( files[key][(position + 2):] )
     str_.append(text_read_file_)
     print("".join(str_))
     write_file_2.write("".join(str_))
-    result = subprocess.run(["bash", "compile.sh"])
     write_file_2.close()
-    write_file_3 = open("main.c", "w")
-    write_file_3.write(text_read_file)
-    write_file_3.close()
-    os.remove("main-backup.c")
 if len(sys.argv) > 1:
     function(sys.argv[1])        
 else:
@@ -134,16 +136,8 @@ else:
         file_open = open("main.c", "r")
         file_open.read()
         file_open.close()
-        function(sys.argv[1])
+        function("main.c")
     except:
         file_write = open("main.c", "w")
         file_write.write('/**/\n//^Where the URLs go.\n/*main*/\nint main(){\n}')
-        file_write.close() 
-    try:
-        file_open = open("compile.sh", "r")
-        file_open.read()
-        file_open.close()
-    except:
-        file_write = open("compile.sh", "w")
-        file_write.write("gcc main.c -o main")
         file_write.close() 

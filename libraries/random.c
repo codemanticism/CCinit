@@ -1,6 +1,7 @@
 /**/
 #include <stdio.h>
 #include <time.h>
+#include <stdint.h>
 // Works.
 
 int generate_random_number(unsigned int limit){
@@ -8,7 +9,7 @@ int generate_random_number(unsigned int limit){
     timespec_get(&ts, TIME_UTC);
     char buff[100];
     strftime(buff, sizeof buff, "%D %T", gmtime(&ts.tv_sec));
-    unsigned int int_ = ts.tv_nsec * 1000000000000;
+    uint64_t int_ = (uint64_t)ts.tv_nsec * 1000000000000ULL;
     unsigned int result = 0;
 	for(; int_ > 0; int_ /= 10){
 	    unsigned long factorial = 1;
