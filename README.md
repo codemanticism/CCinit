@@ -1,10 +1,10 @@
 # CCinit
+<img width="320" height="100" alt="image" src="https://i.ibb.co/WW5V92kJ/ccinit.png" />
 ⚠️ This is stil a largely experimental thing.  
 A tool that serves so that the dependences can be more easily managed, in an easy way.
 The `library` directory is not really supposed to be really be used as one cohesive library, but is instead as a mere test of the program.
 ## Introduction
 This only works on GNU/Linux as of now.
-<img width="320" height="100" alt="image" src="https://i.ibb.co/WW5V92kJ/ccinit.png" />
 To install CCinit, use this, except you might want to replace the `~` directory with something else.
 
 ```bash
