@@ -28,15 +28,16 @@ def process(text):
         old = []
         count = 0
         for string in array:
-            if string[0] == '/':
-                count = 0
-                for character in string:
-                    if character == '/':
-                        count += 1
-                new_array.append( "/".join(old[:(len(old) - count)]) + string )
-            else:
-                new_array.append( string )
-                old = string.split("/") 
+            if len(string) > 0:
+                if string[0] == '/':
+                    count = 0
+                    for character in string:
+                        if character == '/':
+                            count += 1
+                    new_array.append( "/".join(old[:(len(old) - count)]) + string )
+                else:
+                    new_array.append( string )
+                    old = string.split("/") 
         for url in new_array:
             divisions = url.split("/")
             try:            
@@ -51,24 +52,24 @@ def function(argument):
     global library
     process(argument)
     read_file = open("main.c", "r")
-    text = read_file.read()
+    text_read_file = read_file.read()
     read_file.close()
-    backup_file = open("main-backup.c", "r")
-    write_file.write(read_file)
+    write_file = open("main-backup.c", "w")
+    write_file.write(text_read_file)
     write_file.close() 
-    write_file = open("main.c", "r")
+    write_file_2 = open("main.c", "w")
     str_ = []
     for library in libraries:
         str_.append('#include "')
         str_.append(library)
         str_.append('"\n')
-    str_.append(read_file)    
-    write_file.write("".join(str_))
+    str_.append(text_read_file)    
+    write_file_2.write("".join(str_))
     result = subprocess.run(["bash", "compile.sh"])
-    write_file.close()
-    write_file = open("main.c", "r")
-    write_file.write(read_file)
-    write_file.close()
+    write_file_2.close()
+    write_file_3 = open("main.c", "w")
+    write_file_3.write(text_read_file)
+    write_file_3.close()
     os.remove("main-backup.c")
 if len(sys.argv) > 1:
     function(sys.argv[1])        
@@ -80,7 +81,7 @@ else:
         function(sys.argv[1])
     except:
         file_write = open("main.c", "w")
-        file_write.write("/**/\n//^Where the URLs go. Also \nint main(){\n}")
+        file_write.write('/**/\n//^Where the URLs go.\n#include "project.h"\nint main(){\n}')
         file_write.close() 
     try:
         file_open = open("compile.sh", "r")
@@ -88,5 +89,5 @@ else:
         file_open.close()
     except:
         file_write = open("compile.sh", "w")
-        file_write.write("gcc main.c - o mian")
+        file_write.write("gcc main.c *.h -o main")
         file_write.close() 
