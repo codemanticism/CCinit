@@ -67,29 +67,31 @@ def function(argument):
     global libraries
     global files
     global dependencies
-    global already_done
     include = '#include'
     process(argument)
     read_file = open("main.c", "r")
+    global already_done
     text_read_file = read_file.read()
     read_file.close()
-    text_read_file_ = text_read_file[re.find(r'\n[^\n"](.*)\/\*main\*\/.*[^\n"][\s\S]*', text_read_file)];
+    pos = re.search(r'\n[^\n"](.*)\/\*main\*\/.*[^\n"][\s\S]*', text_read_file)
+    text_read_file_ = text_read_file[0:pos]
     write_file = open("main-backup.c", "w")
     write_file.write(text_read_file)
     write_file.close() 
     write_file_2 = open("main.c", "w")
     str_ = []
     includes = []
-    files_keys = list(files.keys)
+    files_keys = list( files.keys() )
     file_count = len(files) - 1
-    already_done = []
     while False in already_done:
+        print(already_done)
         while file_count >= 0:
+            boolean = False
             key = files_keys[file_count]
-            boolean = True
+            print(dependences[key])
             for dependence in dependences[key]:
                 if dependence not in already_done:
-                    boolean = False
+                    boolean = True
             if boolean:
                 break
             file = files[key]
@@ -111,12 +113,13 @@ def function(argument):
         str_.append("#include ")
         str_.append(include_item)
         str_.append("\n")
-    str_.append("\n\n")
+    str_.append("\n")
     for file in files:
         position = file.find("\n\n")
         str_.append( "\n" )
         str_.append( file[(position + 2):] )
     str_.append(text_read_file_)
+    print("".join(str_))
     write_file_2.write("".join(str_))
     result = subprocess.run(["bash", "compile.sh"])
     write_file_2.close()
@@ -134,7 +137,7 @@ else:
         function(sys.argv[1])
     except:
         file_write = open("main.c", "w")
-        file_write.write('/**/\n//^Where the URLs go.\n#include "project.h"\n/*main*/\nint main(){\n}')
+        file_write.write('/**/\n//^Where the URLs go.\n/*main*/\nint main(){\n}')
         file_write.close() 
     try:
         file_open = open("compile.sh", "r")
@@ -142,5 +145,5 @@ else:
         file_open.close()
     except:
         file_write = open("compile.sh", "w")
-        file_write.write("gcc main.c *.h -o main")
+        file_write.write("gcc main.c -o main")
         file_write.close() 
