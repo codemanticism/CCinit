@@ -10,7 +10,7 @@ CCinit is a tool that generates a single `main.c` file based on a `/**/` annotat
 
 It doesn't yet support global variables and some other stuff like the C preprocessor. Use at your own risk.
 
-Note that libraries need to be converted to this format, so that they can work at all.
+Note that libraries need to be converted to this format, so that they can work at all, so, for example, https://github.com/tsoding/ded could be forked and have the system converted to the system of /**/ annotations on the header of the file.
 
 Also linters as of right now aren't compatible with this special library format.
 
@@ -66,7 +66,7 @@ int main(){
 }
 ...
 ```
-or (it should work):
+or (it should work), if it is located at the web address below, for it to be used by local scripts:
 ```c
 /*/calc.c /random.c*/
 //IF PATH is https://raw.githubusercontent.com/codemanticism/CCinit/refs/heads/main/libraries/something.c 
