@@ -1,11 +1,12 @@
 # CCinit
 <img width="320" height="100" alt="image" src="https://i.ibb.co/WW5V92kJ/ccinit.png" />
 <b> ⚠️ This is still a largely experimental thing. </b> 
+CCinit lets C files declare their own dependencies using a single comment.
+CCinit is a tool that generates a single `main.c` file based on a `/**/` annotation, at the start of the file, (described in a section below) which might hypothetically include libraries written as URLs or, in shorter form, with an initial `/` in the format described below.
+
 ## License
 
 MIT License. See [LICENSE](LICENSE).
-
-CCinit is a tool that generates a single `main.c` file based on a `/**/` annotation, at the start of the file, (described in a section below) which might hypothetically include libraries written as URLs or, in shorter form, with an initial `/` in the format described below.
 ## Important notes
 
 It doesn't yet support global variables and some other stuff like the C preprocessor. Use at your own risk.
