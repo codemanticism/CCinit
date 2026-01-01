@@ -73,10 +73,11 @@ def function(argument):
 
     include = '#include'
     process(argument, argument, "")
+    print("Dependencies:")
     for dependency in dependencies:
         if dependency != argument:
             os.remove(dependency)
-        print('✅', dependency, 'installed.')
+        print("\t", dependency)
 
     read_file = open("main.c", "r")
     global already_done
@@ -162,6 +163,7 @@ def function(argument):
 
     write_file_2.write("".join(str_))
     write_file_2.close()
+    print("Job done.")
 if len(sys.argv) > 1:
     function(sys.argv[1])        
 else:
