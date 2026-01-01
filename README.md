@@ -28,13 +28,18 @@ The `library` directory is not really supposed to be really be used as one cohes
 ## How to install it
 This only works on GNU/Linux as of now or it could be used on Windows with a compatibility layer.
 
-To install CCinit, use this, except you might want to replace the `~` directory with something else.
+To install with pip:
+```bash
+pip install ccinit
+```
 
+Or you might do this:
 ```bash
 cd ~
 git clone https://github.com/codemanticism/CCinit.git
 cp ~/CCinit/ccinit.py ~/.local/bin/ccinit
 ```
+
 ## How to use
 ### What to type in the terminal
 * `ccinit`: Create a `main.c` file.
