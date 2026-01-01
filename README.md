@@ -5,6 +5,8 @@
 CCinit is a tool that generates a single `main.c` file based on a `/**/` annotation, at the start of the file, (described in a section below) which might hypothetically include libraries written as URLs or, in shorter form, with an initial `/` in the format described below.
 ## Important notes
 
+It doesn't yet support global variables and some other stuff like the C preprocessor. Use at your own risk.
+
 Note that libraries need to be converted to this format, so that they can work at all.
 
 Also linters as of right now aren't compatible with this special library format.
