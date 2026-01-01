@@ -7,7 +7,7 @@ libraries = []
 already_done = {}
 files = {}
 dependencies = {}
-def process(text, except_if):
+def process(text, except_if, url_arg):
     global libraries
     global files
     global dependencies
@@ -36,7 +36,11 @@ def process(text, except_if):
                 integer += 1
             array = read[2:integer].split(" ")
             new_array = []
-            old = text.split("/")
+            old = []
+            try:
+                old = url_arg.split("/")
+            except:
+                old = []
             count = 0
             for string in array:
                 if len(string) > 0:
@@ -58,17 +62,17 @@ def process(text, except_if):
                     read_file = open(divisions[len(divisions) - 1], "r")
                     read_file.read()
                     read_file.close()
-                    process(divisions[len(divisions) - 1], except_if)
+                    process(divisions[len(divisions) - 1], except_if, url)
                 except:
                     result = subprocess.run(["wget", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-                    process(divisions[len(divisions) - 1], except_if)
+                    process(divisions[len(divisions) - 1], except_if, url)
 def function(argument):
     global libraries
     global files
     global dependencies
 
     include = '#include'
-    process(argument, argument)
+    process(argument, argument, "")
     for dependency in dependencies:
         if dependency != argument:
             os.remove(dependency)
