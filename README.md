@@ -32,7 +32,10 @@ To install with pip:
 ```bash
 pip install ccinit
 ```
-
+Or with pípx:
+```bash
+pipx install ccinit
+```
 Or you might do this:
 ```bash
 cd ~

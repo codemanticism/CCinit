@@ -169,7 +169,12 @@ def function(argument):
     print("Job done.")
 def main():
     if len(sys.argv) > 1:
-        function(sys.argv[1])        
+        if sys.argv[1] != '--help':
+            function(sys.argv[1])
+        else:
+            print("Documentation: https://github.com/codemanticism/CCinit/tree/main")
+            print("ccinit -> Setups a main.c file for you in the correct format already.")
+            print("ccinit main.c -> Downloads dependencies and puts it all into the file in question.")                    
     else:
         try:
             file_open = open("main.c", "r")
